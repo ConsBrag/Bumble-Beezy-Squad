@@ -1,2 +1,2 @@
-# JoJo-Reference
+# Bumble Beezy Squad
 Веб-приложение "генератор"
