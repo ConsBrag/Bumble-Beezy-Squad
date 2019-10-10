@@ -3,6 +3,24 @@
 <head>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<title>Генератор дипломов</title>
+	<script>
+		function CheckData(button)
+		{
+			let SelectedTopic = new Array();
+			let arcbx = document.getElementsByClassName("form-check-input");
+			for (i=0; i<arcbx.length; i++)
+			{
+				if(arcbx[i].checked == true) SelectedTopic.push(i);
+			}
+			let data = {
+				name: document.getElementById("NameInput").value,
+				lastName: document.getElementById("LastNameInput").value,
+				CountWord: document.getElementById("CountWordInput").value,
+				Topics: SelectedTopic
+			}
+			console.log(JSON.stringify(data))
+		}
+	</script>
 </head>
 <body>
 	<div class="container">
@@ -32,7 +50,7 @@
 			</div>
 			<div class="form-group">
 				<label>Примерное количество слов:</label>
-				<input type="firstName" class="form-control" id="NameInput" placeholder="Количество слов">
+				<input type="countWord" class="form-control" id="CountWordInput" placeholder="Количество слов">
 				<div class="invalid-feedback">Заполните примерное количество слов</div>
 			</div>
 			<div class="form-group">
@@ -109,7 +127,7 @@
 				</div>
 			</div>
 					
-			<button type="button" class="btn btn-primary btn-block">Написать диплом</button>
+			<button type="button" class="btn btn-primary btn-block" onclick="CheckData(this)">Написать диплом</button>
 		</form>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
