@@ -14,5 +14,4 @@ def index():
     #parser.getTextOnTopic(request.json['Topic'], request.json['CountWord'])
     return jsonify({'message': "данные получены!"})
   #parser.getTextOnTopic(['physics', 'law'])
-  return render_template('index.html')
-
+  return render_template('index.html'
