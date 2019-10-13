@@ -11,7 +11,7 @@ CORS(app)
 def index():
   if request.method == 'POST':
     print(request.json['name'])
-    #parser.getTextOnTopic(request.json['Topic'], request.json['CountWord'])
+    parser.getTextOnTopic(request.json['Topics'], int(request.json['CountWord']))
     return jsonify({'message': "данные получены!"})
   #parser.getTextOnTopic(['physics', 'law'])
-  return render_template('index.html'
+  return render_template('index.html')
