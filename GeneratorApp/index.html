@@ -8,6 +8,7 @@
 		let SelectedTopic;
 		function CheckData()
 		{
+			DictionaryTopic = ['astronomy','geology','gyroscope','literature','marketing','mathematics','music','polit','agrobiologia','law','psychology','geography','physics','philosophy','chemistry','estetica'];
 			let form = document.querySelector('.needs-validation');
 			if(!form.checkValidity())form.classList.add('was-validated');
 			else{
@@ -16,8 +17,9 @@
 			let arcbx = document.getElementsByClassName("form-check-input");
 			for (i=0; i<arcbx.length; i++)
 			{
-				if(arcbx[i].checked == true) SelectedTopic.push(i);
+				if(arcbx[i].checked == true)SelectedTopic.push(DictionaryTopic[i]);
 			}
+
 			data = {
 				name: document.getElementById("NameInput").value,
 				lastName: document.getElementById("LastNameInput").value,
@@ -29,10 +31,18 @@
 			}
 		}
 
-		function SendData()
+		async function SendData()
 		{
 			console.log(JSON.stringify(data))
-			document.location.href = "/app";
+			let response = await fetch('/', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json;charset=utf-8'
+				},
+				body: JSON.stringify(data)
+			});
+			let result = await response.json();
+			alert(result.message);
 		}
 	</script>
 </head>
