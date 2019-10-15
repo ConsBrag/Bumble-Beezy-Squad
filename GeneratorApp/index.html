@@ -42,7 +42,8 @@
 				body: JSON.stringify(data)
 			});
 			let result = await response.json();
-			alert(result.message);
+			if(result.message == 'True') location.href = '/diplom';
+;
 		}
 	</script>
 </head>
