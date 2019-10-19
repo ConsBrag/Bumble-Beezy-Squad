@@ -1,17 +1,23 @@
-import json, requests, time, pymorphy2
+import json, requests, time, pymorphy2, os, glob
 from bs4 import BeautifulSoup
 from entity.diplom import Diplom
+from time import sleep
+import urllib.request
+
+images_dir = os.path.abspath('../images/')
 
 wordsCount = 0
 firstIteration = 0
 
 # topics - МАССИВ тем по диплому (не кидать строку, даже если элемент один)
-def getTextOnTopic(topics, countWords):
+def getTextOnTopic(topics, countWords):  
   global wordsCount
   global firstIteration
   firstIteration = 0
   wordsCount = 0
   diplom = Diplom()
+  
+  removeImages()
 
   topic = '+'.join(topics)
   while wordsCount < countWords:
@@ -19,6 +25,11 @@ def getTextOnTopic(topics, countWords):
     parseText(response.text, diplom)
   
   return diplom
+
+def removeImages():
+  filelist = glob.glob(os.path.join(images_dir, "*.jpg"))
+  for f in filelist:
+    os.remove(f)
 
 def parseText(html, diplom):
   global firstIteration
@@ -38,7 +49,10 @@ def parseText(html, diplom):
 
 def getImage(txt):
   noun = getNoun(txt)
-  print(noun)
+  response = requests.post('https://ru.depositphotos.com/stock-photos/'+noun+'.html?filter=all')
+  soup = BeautifulSoup(response.text, 'lxml')
+  text = soup.find('img', class_='file-container__image')['src']
+  urllib.request.urlretrieve(text, images_dir+'/'+noun+'.jpg')
 
 def getNoun(txt):
   morph = pymorphy2.MorphAnalyzer()
@@ -59,5 +73,5 @@ def getNoun(txt):
   nouns_with_counts = [x[0] for x in
     sorted(nouns_with_counts.items(), key=lambda x: (x[1], x[0]), reverse=True)]
   
-  return nouns_with_counts[0] + '%20' + nouns_with_counts[1]
+  return nouns_with_counts[0] + '-' + nouns_with_counts[1]
   
