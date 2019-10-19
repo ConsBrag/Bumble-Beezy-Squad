@@ -3,6 +3,7 @@ import parser
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from flask_cors import CORS
 
+imagesPath = os.path.abspath('../images/')
 template_dir = os.path.abspath('..')
 app = Flask(__name__, template_folder=template_dir)
 CORS(app)
@@ -12,6 +13,9 @@ app.config['DOCX_USER'] = 'D:/!Git/Bumble-Beezy-Squad/GeneratorApp/backend/MSwor
 @app.route('/', methods=['GET', 'POST'])
 def index():
   if request.method == 'POST':
+    if not os.path.isdir(imagesPath):
+      os.makedirs(imagesPath)
+
     print(request.json['name'])
     #parser.getTextOnTopic(request.json['Topics'], int(request.json['CountWord']))
     return jsonify(message ='True')
