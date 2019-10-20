@@ -8,6 +8,7 @@ images_dir = os.path.abspath('../images/')
 
 wordsCount = 0
 firstIteration = 0
+imageCount = 0
 
 # topics - МАССИВ тем по диплому (не кидать строку, даже если элемент один)
 def getTextOnTopic(topics, countWords):  
@@ -15,6 +16,7 @@ def getTextOnTopic(topics, countWords):
   global firstIteration
   firstIteration = 0
   wordsCount = 0
+  imageCount = 0
   diplom = Diplom()
   
   removeImages()
@@ -48,11 +50,19 @@ def parseText(html, diplom):
     wordsCount += len(i.text.split())
 
 def getImage(txt):
+  global imageCount
   noun = getNoun(txt)
   response = requests.post('https://ru.depositphotos.com/stock-photos/'+noun+'.html?filter=all')
   soup = BeautifulSoup(response.text, 'lxml')
   text = soup.find('img', class_='file-container__image')['src']
-  urllib.request.urlretrieve(text, images_dir+'/'+noun+'.jpg')
+  urllib.request.urlretrieve(text, images_dir+'/'+getNumber(imageCount)+noun+'.jpg')
+  imageCount += 1
+
+def getNumber(num): #Convert number to 000
+  if num<9: return '00' + str(num)
+  if num<99: return '0' + str(num)
+  return str(num)
+
 
 def getNoun(txt):
   morph = pymorphy2.MorphAnalyzer()

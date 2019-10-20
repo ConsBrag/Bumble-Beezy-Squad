@@ -1,5 +1,5 @@
 import os
-import parser
+import parserS
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from flask_cors import CORS
 
@@ -17,7 +17,7 @@ def index():
       os.makedirs(imagesPath)
 
     print(request.json['name'])
-    #parser.getTextOnTopic(request.json['Topics'], int(request.json['CountWord']))
+    parser.getTextOnTopic(request.json['Topics'], int(request.json['CountWord']))
     return jsonify(message ='True')
   #parser.getTextOnTopic(['physics', 'law'])
   return render_template('index.html')
