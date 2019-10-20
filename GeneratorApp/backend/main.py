@@ -9,21 +9,23 @@ template_dir = os.path.abspath('..')
 app = Flask(__name__, template_folder=template_dir)
 CORS(app)
 
-app.config['DOCX_USER'] = 'D:/!Git/Bumble-Beezy-Squad/GeneratorApp/backend/MSword'
+app.config['DOCX_USER'] = 'D:/.Git/Bumble-Beezy-Squad/GeneratorApp/backend/MSword/'
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
   if request.method == 'POST':
+    namefile = ''
     if not os.path.isdir(imagesPath):
       os.makedirs(imagesPath)
-    print(request.json['name'])
     diplom = Diplom()
     diplom = parserS.getTextOnTopic(request.json['Topics'], int(request.json['CountWord']))
-    docxgen.generateDocx(request.json['name'], request.json['lastname'], diplom)
-    return jsonify(message ='True')
-  #parser.getTextOnTopic(['physics', 'law'])
+    namefile = docxgen.generateDocx(request.json['name'], request.json['lastName'], diplom)
+    if namefile: return jsonify(message =namefile)
+    return jsonify(message = 'False')
+
   return render_template('index.html')
 
-@app.route('/diplom')
-def download():
-  return send_from_directory(app.config['DOCX_USER'], filename = "out.docx", as_attachment=False)
+@app.route('/<string:doc_name>')
+def download(doc_name):
+  print(app.config['DOCX_USER']+doc_name)
+  return send_from_directory(app.config['DOCX_USER'], filename = doc_name, as_attachment=False)
