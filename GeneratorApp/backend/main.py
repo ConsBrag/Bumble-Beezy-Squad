@@ -1,5 +1,6 @@
 import os
-import parserS
+import parserS, docxgen
+from entity.diplom import Diplom
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from flask_cors import CORS
 
@@ -15,13 +16,14 @@ def index():
   if request.method == 'POST':
     if not os.path.isdir(imagesPath):
       os.makedirs(imagesPath)
-
     print(request.json['name'])
-    parser.getTextOnTopic(request.json['Topics'], int(request.json['CountWord']))
+    diplom = Diplom()
+    diplom = parserS.getTextOnTopic(request.json['Topics'], int(request.json['CountWord']))
+    docxgen.generateDocx(request.json['name'], request.json['lastname'], diplom)
     return jsonify(message ='True')
   #parser.getTextOnTopic(['physics', 'law'])
   return render_template('index.html')
 
 @app.route('/diplom')
 def download():
-  return send_from_directory(app.config['DOCX_USER'], filename = "template.docx", as_attachment=False)
+  return send_from_directory(app.config['DOCX_USER'], filename = "out.docx", as_attachment=False)
